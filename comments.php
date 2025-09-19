@@ -18,8 +18,15 @@
                 <div class="comment-body">
                     <!-- 评论者头像 -->
                     <div class="comment-avatar">
-                        <?php $avatar = $comments->gravatar('40', ''); ?>
-                        <img src="<?php echo $avatar; ?>" alt="<?php $comments->author(); ?>" class="avatar">
+                        <?php
+                        $email = $comments->mail;
+                        if ($email) {
+                            $avatar_url = 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($email))) . '?s=50&d=identicon&r=g';
+                        } else {
+                            $avatar_url = 'https://www.gravatar.com/avatar/?s=50&d=identicon&r=g';
+                        }
+                        ?>
+                        <img src="<?php echo $avatar_url; ?>"
                     </div>
 
                     <!-- 评论内容区域 -->
@@ -86,11 +93,14 @@
             <!-- 已登录用户显示 -->
             <?php if($this->user->hasLogin()): ?>
                 <div class="logged-in-as">
-                    <p>
+                    <div class="user-info">
                         <i class="icon-user"></i>
-                        登录身份：<a href="<?php $this->options->adminUrl(); ?>"><?php $this->user->screenName(); ?></a>
-                        <a href="<?php $this->options->logoutUrl(); ?>" title="退出登录">退出 &raquo;</a>
-                    </p>
+                        <span>欢迎回来，</span>
+                        <strong><a href="<?php $this->options->adminUrl(); ?>"><?php $this->user->screenName(); ?></a></strong>
+                    </div>
+                    <a href="<?php $this->options->logoutUrl(); ?>" class="logout-link" title="退出登录">
+                        <i class="icon-logout"></i> 退出
+                    </a>
                 </div>
 
             <!-- 未登录用户输入表单 -->

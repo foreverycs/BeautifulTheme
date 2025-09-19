@@ -16,22 +16,30 @@ if (!defined('__TYPECHO_ROOT_DIR__')) exit;
                     <h1 class="post-title"><?php $this->title() ?></h1>
 
                     <div class="post-meta">
+                        <?php $showPostMeta = $this->options->showPostMeta ?: array('author', 'date', 'category', 'comments'); ?>
+
+                        <?php if (in_array('author', $showPostMeta)): ?>
                         <span class="post-author">
                             <i class="icon-user"></i>
                             <a href="<?php $this->author->permalink(); ?>" rel="author"><?php $this->author(); ?></a>
                         </span>
+                        <?php endif; ?>
 
+                        <?php if (in_array('date', $showPostMeta)): ?>
                         <span class="post-date">
                             <i class="icon-calendar"></i>
                             <time datetime="<?php $this->date('c'); ?>" itemprop="datePublished">
                                 <?php $this->date(); ?>
                             </time>
                         </span>
+                        <?php endif; ?>
 
+                        <?php if (in_array('category', $showPostMeta)): ?>
                         <span class="post-category">
                             <i class="icon-folder"></i>
                             <?php $this->category(','); ?>
                         </span>
+                        <?php endif; ?>
 
                         <span class="post-views">
                             <i class="icon-eye"></i>
@@ -52,7 +60,7 @@ if (!defined('__TYPECHO_ROOT_DIR__')) exit;
                 </div>
 
                 <footer class="post-footer">
-                    <?php if ($this->tags): ?>
+                    <?php if ($this->tags && in_array('tags', $showPostMeta)): ?>
                     <div class="post-tags">
                         <i class="icon-tag"></i>
                         <span class="tags-label">标签：</span>
@@ -91,6 +99,7 @@ if (!defined('__TYPECHO_ROOT_DIR__')) exit;
             </article>
 
             <!-- 相关文章 -->
+            <?php if ($this->options->showRelatedPosts): ?>
             <section class="related-posts">
                 <h3 class="related-title">相关文章</h3>
                 <div class="related-posts-list">
@@ -118,6 +127,7 @@ if (!defined('__TYPECHO_ROOT_DIR__')) exit;
                     <?php endif; ?>
                 </div>
             </section>
+            <?php endif; ?>
 
             <!-- 评论区域 -->
             <?php if ($this->allow('comment')): ?>

@@ -12,10 +12,38 @@
     ], '', ' - '); ?><?php $this->options->title(); ?></title>
 
     <!-- 网站图标 -->
+    <?php if ($this->options->favicon): ?>
+    <link rel="icon" type="image/x-icon" href="<?php $this->options->favicon(); ?>">
+    <?php else: ?>
     <link rel="icon" type="image/x-icon" href="<?php $this->options->themeUrl('favicon.ico'); ?>">
+    <?php endif; ?>
 
     <!-- CSS 样式 -->
     <link rel="stylesheet" type="text/css" href="<?php $this->options->themeUrl('style.css'); ?>">
+
+    <!-- 主题颜色 -->
+    <style>
+    :root {
+        --theme-color: <?php echo $this->options->themeColor ?: '#007cba'; ?>;
+        --theme-color-light: <?php echo $this->options->themeColor ?: '#007cba'; ?>20;
+        --theme-color-dark: <?php
+            $color = $this->options->themeColor ?: '#007cba';
+            // 简单的颜色加深处理
+            $hex = str_replace('#', '', $color);
+            $r = max(0, hexdec(substr($hex, 0, 2)) - 30);
+            $g = max(0, hexdec(substr($hex, 2, 2)) - 30);
+            $b = max(0, hexdec(substr($hex, 4, 2)) - 30);
+            echo sprintf('#%02x%02x%02x', $r, $g, $b);
+        ?>;
+    }
+    </style>
+
+    <!-- 自定义CSS -->
+    <?php if ($this->options->customCSS): ?>
+    <style>
+    <?php echo $this->options->customCSS; ?>
+    </style>
+    <?php endif; ?>
 
     <!-- 响应式设计 -->
     <meta name="renderer" content="webkit">
@@ -39,17 +67,29 @@
     <meta property="og:url" content="<?php $this->permalink(); ?>">
 
     <?php $this->header(); ?>
+
+    <!-- 统计代码 -->
+    <?php if ($this->options->analyticsCode): ?>
+    <?php echo $this->options->analyticsCode; ?>
+    <?php endif; ?>
 </head>
-<body>
+<body class="layout-<?php echo $this->options->layout ?: 'right-sidebar'; ?> post-list-<?php echo $this->options->postListStyle ?: 'default'; ?>">
     <header class="site-header">
-        <div class="container">
-            <div class="header-content">
-                <div class="site-branding">
+        <div class="header-content">
+            <div class="site-branding">
+                    <?php if ($this->options->logoUrl): ?>
+                    <h1 class="site-title">
+                        <a href="<?php $this->options->siteUrl(); ?>" rel="home">
+                            <img src="<?php echo $this->options->logoUrl; ?>" alt="<?php $this->options->title() ?>" class="site-logo">
+                        </a>
+                    </h1>
+                    <?php else: ?>
                     <h1 class="site-title">
                         <a href="<?php $this->options->siteUrl(); ?>" rel="home">
                             <?php $this->options->title() ?>
                         </a>
                     </h1>
+                    <?php endif; ?>
                     <?php if ($this->options->description()): ?>
                     <p class="site-description"><?php $this->options->description() ?></p>
                     <?php endif; ?>
@@ -79,10 +119,9 @@
                     <span class="menu-toggle-icon"></span>
                 </button>
             </div>
-        </div>
     </header>
 
-    <div class="site-content"><?php if (!$this->is('index')): ?>
+    <div class="site-content"><?php if ($this->options->showBreadcrumb && !$this->is('index')): ?>
         <div class="breadcrumb">
             <div class="container">
                 <span class="breadcrumb-home">

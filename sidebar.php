@@ -1,6 +1,14 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
 
 <aside class="sidebar">
+    <?php
+    $sidebarWidgets = $this->options->sidebarWidgets;
+    if (!$sidebarWidgets) {
+        $sidebarWidgets = array('recent-posts', 'recent-comments', 'categories', 'tags', 'archives');
+    }
+    ?>
+
+    <?php if (in_array('recent-posts', $sidebarWidgets)): ?>
     <!-- 最新文章 -->
     <div class="widget widget-recent-posts">
         <h3 class="widget-title">最新文章</h3>
@@ -14,7 +22,9 @@
             <?php endwhile; ?>
         </ul>
     </div>
+    <?php endif; ?>
 
+    <?php if (in_array('recent-comments', $sidebarWidgets)): ?>
     <!-- 最新评论 -->
     <div class="widget widget-recent-comments">
         <h3 class="widget-title">最新评论</h3>
@@ -41,7 +51,9 @@
             <?php endif; ?>
         </ul>
     </div>
+    <?php endif; ?>
 
+    <?php if (in_array('categories', $sidebarWidgets)): ?>
     <!-- 文章分类 -->
     <div class="widget widget-categories">
         <h3 class="widget-title">文章分类</h3>
@@ -49,7 +61,9 @@
             <?php $this->widget('Widget_Metas_Category_List')->parse('<li><a href="{permalink}" title="查看 {name} 下的所有文章">{name}</a> <span class="category-count">({count})</span></li>'); ?>
         </ul>
     </div>
+    <?php endif; ?>
 
+    <?php if (in_array('tags', $sidebarWidgets)): ?>
     <!-- 标签云 -->
     <div class="widget widget-tags">
         <h3 class="widget-title">标签云</h3>
@@ -57,7 +71,9 @@
             <?php $this->widget('Widget_Metas_Tag_Cloud', 'sort=count&ignoreZeroCount=1&desc=1&limit=20')->parse('<a href="{permalink}" class="tag-link" title="查看标签 {name} 下的所有文章">{name}</a>'); ?>
         </div>
     </div>
+    <?php endif; ?>
 
+    <?php if (in_array('archives', $sidebarWidgets)): ?>
     <!-- 归档 -->
     <div class="widget widget-archives">
         <h3 class="widget-title">文章归档</h3>
@@ -72,7 +88,9 @@
             <?php endwhile; ?>
         </ul>
     </div>
+    <?php endif; ?>
 
+    <?php if (in_array('links', $sidebarWidgets)): ?>
     <!-- 友情链接 -->
     <div class="widget widget-links">
         <h3 class="widget-title">友情链接</h3>
@@ -81,7 +99,9 @@
             <li><a href="https://typecho.org/" title="Typecho 官方网站" target="_blank">Typecho</a></li>
         </ul>
     </div>
+    <?php endif; ?>
 
+    <?php if (in_array('statistics', $sidebarWidgets)): ?>
     <!-- 站点统计 -->
     <div class="widget widget-statistics">
         <h3 class="widget-title">站点统计</h3>
@@ -95,7 +115,9 @@
             <li><i class="icon-folder"></i> 分类总数：若干个</li>
         </ul>
     </div>
+    <?php endif; ?>
 
+    <?php if (in_array('meta', $sidebarWidgets)): ?>
     <!-- 其他链接 -->
     <div class="widget widget-meta">
         <h3 class="widget-title">功能链接</h3>
@@ -110,4 +132,5 @@
             <li><a href="<?php $this->options->commentsFeedUrl(); ?>" title="订阅评论" target="_blank"><i class="icon-feed"></i> 评论 RSS</a></li>
         </ul>
     </div>
+    <?php endif; ?>
 </aside>
